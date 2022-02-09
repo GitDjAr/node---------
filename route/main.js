@@ -1,13 +1,8 @@
 const Router = require('koa-router')
 const Interceptor = require('./interceptor')
-// const Update = require('./module-route/update')
 // 初始化
 const home = new Router()
 home.get('/', async (ctx, next) => {
-  ctx.body = {
-    msg: ctx.query,
-    string: ctx.request.querystring
-  }
 })
 
 const page = new Router()

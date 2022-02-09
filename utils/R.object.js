@@ -1,15 +1,16 @@
-const log  = require('../utils/log')
+const log = require('../utils/log')
 class RObj {
   error(e) {
     // 写入日志
     log(e)
-    return  new Error(e)
+    return new Error(e)
   }
   msg(val) {
     const map = {
-      0: '未知错误',
+      0: '未知状态',
       1: '成功',
-      2: '存储错误'
+      2: '存储错误',
+      3: '网络错误'
     }
     return map[val]
   }
@@ -21,9 +22,9 @@ class RObj {
   }
 }
 const R = new RObj()
-module.exports = (ctx,req,res,next,code = 1)=>{
+module.exports = ({ ctx, code = 0 , message = null}) => {
   return {
-    msg:R.msg(code),
-    code:R.state(code)
+    msg: message || R.msg(code),
+    code: R.state(code)
   }
 }
