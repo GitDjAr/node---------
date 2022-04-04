@@ -21,7 +21,7 @@ routePathList.forEach(({ fileName, wholePath }) => {
   Routers.use(`/${fileName}`, obj.routes(), obj.allowedMethods())
 })
 
-
+console.log(Routers);
 module.exports = (app) => {
   // 挂载路由到koa实例
   app
