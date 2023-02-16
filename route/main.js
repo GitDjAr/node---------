@@ -10,7 +10,7 @@ page.get('/index', async (ctx, next) => {
   ctx.body = 'index.html'
 })
 
-//装载路由(组装子路由为一个整体)
+//装载路由(组装子路由为一个整体--注釋)
 const Routers = new Router()
 Routers.use('/', home.routes(), home.allowedMethods())
 Routers.use('/page', page.routes(), page.allowedMethods())
