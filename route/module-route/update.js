@@ -8,7 +8,7 @@ const update = new Router();
 update.post('/file', async (ctx) => {
   try {
     const { files:{file}, path: filePath, restart } = ctx.request.body;
-
+    console.log(file,ctx.request.body.files)
     if (!file) {
       ctx.throw(400, '没有文件uploade');
     }
