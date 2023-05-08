@@ -7,16 +7,17 @@ const update = new Router();
 
 update.post('/file', async (ctx) => {
   try {
-    const { file, path: filePath, restart } = ctx.request.body;
+    const { files:{file}, path: filePath, restart } = ctx.request.body;
 
     if (!file) {
-      ctx.throw(400, 'No file uploaded');
+      ctx.throw(400, '没有文件uploade');
     }
 
     const isMultipleFiles = Array.isArray(file);
 
     if (isMultipleFiles) {
       // Handle multiple files here
+        ctx.body = { message: '目前不支持多文件上传' };
       return;
     }
 
