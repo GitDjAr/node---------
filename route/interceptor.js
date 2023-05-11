@@ -7,7 +7,7 @@ module.exports = async (ctx, next) => {
   console.log('请求拦截');
   console.log(ctx.request.body);
   let T = Date.now()
-  ctx.resContent = {
+  ctx.body = {
     code: 1
   }
   // await new Promise(resolve=>{
@@ -17,15 +17,15 @@ module.exports = async (ctx, next) => {
   // })
   // token 是否合理，过期,获取头信息等
   await next()
-  console.log('响应拦截', ctx.resContent);
+  console.log('响应拦截', ctx.body);
   const {
     body = {},
     message,
     code
-  } = ctx.resContent
+  } = ctx.body
   ctx.body = {
     Head: {
-      ...R(ctx.resContent),
+      ...R(ctx.body),
       Time: `${Date.now() - T}ms`
     },
     Content: body

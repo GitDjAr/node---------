@@ -33,22 +33,23 @@ const koaBody = require('koa-body')
 const join = require('path').join
 // 端口
 const port = 2004
-const {Host} = require('./utils/ip')
+const { Host } = require('./utils/ip')
 // 初始化实例
 const app = new Koa()
+
 app.use(koaBody({
-  formidable:{
-    maxFieldsSize:20 * 1024 * 1024,//20M
-    uploadDir:join(__dirname,'./file'),
-    keepExtensions:true,
+  formidable: {
+    maxFieldsSize: 200 * 1024 * 1024,//20M
+    uploadDir: join(__dirname, './file'),
+    keepExtensions: true,
   },
-  multipart:true,
+  multipart: true,
 }))
 // 导入路由
 const Router = require('./route/main.js')(app)
 
 // 开启端口监听
-app.listen(port,()=>{
+app.listen(port, () => {
   console.log(`http://localhost:${port}`)
-  console.log(`%chttp://${Host}:${port}`,'color:#4186F4')
+  console.log(`%chttp://${Host}:${port}`, 'color:#4186F4')
 })

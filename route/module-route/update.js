@@ -11,46 +11,68 @@
   code：结果代码，0 表示成功，2 表示解压失败。
   message：结果描述。
  */
+const KoaRouter = require("koa-router");
+const fs = require("fs");
+const extractZip = require("extract-zip");
+const path = require("path");
+const { deleteDir, isAbsolutePath } = require("../../utils/delete");
 
-  const KoaRouter = require('koa-router');
-  const extractZip = require('extract-zip');
-  const path = require('path');
-  const { deleteDir, isAbsolutePath } = require('../../utils/delete');
-  
-  const updateRouter = new KoaRouter();
-  
-  updateRouter.post('/file', async (ctx, next) => {
-    console.log('Update file');
-    const { files, body } = ctx.request;
-    const { file } = files;
-    const { path: targetPath, restart } = body;
-  
-    if (file) {
-      if (Array.isArray(file)) {
-        // 处理多个文件上传
-        file.forEach(item => { });
-      } else {
-        try {
-          const cd = path.join(process.cwd(), '../');
-          const dir = path.join(isAbsolutePath(targetPath) ? targetPath : cd, targetPath);
-  
-          deleteDir(dir, true);
-          await extractZip(file.path, { dir });
-  
-          ctx.resContent.message = '解压成功: ' + dir;
-        } catch (error) {
-          ctx.resContent.code = 2; 
-          ctx.resContent.message = error;
-        }
-      }
+const uploadRouter = new KoaRouter();
+
+
+// 处理文件上传和提取
+uploadRouter.post("/file", async (ctx, next) => {
+
+  const { path: destPath, } = ctx.request.body;
+  const file = ctx.request.files.file
+
+  // console.log('ctx.file.path', ctx, ctx.req, isAbsolutePath(destPath));
+  console.log('destPath', destPath, file, path?.resolve?.(destPath));
+
+  // 检查如果destPath是一个绝对路径
+  if (!isAbsolutePath(destPath)) {
+    ctx.status = 400;
+    ctx.body = {
+      code: 200,
+      message: "无效的路径。请提供一个绝对路径。",
+    };
+    return
+  }
+
+  try {
+    // 检查是否有目的地的路径,如果没有创建它
+    if (!fs.existsSync(destPath)) {
+      fs.mkdirSync(destPath, { recursive: true });
     }
-  
-    if (restart) {
-      ctx.resContent.message = '重启成功!';
+
+    // 提取将ZIP文件 解压到指定的路径
+    await extractZip(file.path, { dir: path?.resolve?.(destPath) });
+    // console.log('ctx.file.path', ctx.file.path, path?.resolve(destPath));
+
+
+    // 清理上传压缩文件
+    fs.unlinkSync(file.path);
+
+    ctx.status = 200;
+    ctx.body = {
+      code: 0,
+      message: "文件提取成功。",
+    };
+  } catch (error) {
+    console.log(error);
+    // 在提取和清理期间处理错误
+    if (fs.existsSync(file.path)) {
+      fs.unlinkSync(file.path);
     }
-  
-    await next();
-  });
-  
-  module.exports = updateRouter;
-  
+
+    ctx.status = 500;
+    ctx.body = {
+      code: 500,
+      message: "文件提取失败。",
+    };
+  }
+
+  await next();
+});
+
+module.exports = uploadRouter;

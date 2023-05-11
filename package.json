@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "nodemon": "nodemon --inspect main.js",
-    "deploy":"node config/dep.config.js",
-    "T-dep":"curl http://www.xn--lg3a.top:82/update/file -F file=@dist/nodeAutoDeploy.zip -F path=/usr/local/nginx/html/nodeAutoDeploy",
+    "deploy": "node config/dep.config.js",
+    "T-dep": "curl http://www.xn--lg3a.top:82/update/file -F file=@dist/nodeAutoDeploy.zip -F path=/usr/local/nginx/html/nodeAutoDeploy",
     "serve": "node main.js"
   },
   "author": "",
@@ -19,6 +19,7 @@
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
+    "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
     "koa2": "^2.0.0-alpha.7",
     "nodemon": "^2.0.15"
