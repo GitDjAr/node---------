@@ -17,9 +17,9 @@ function deleteDir(url, isDri = false,) {
       files.forEach(function (file, index) {
         var curPath = path.join(url, file);
         if (fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
-          if(['file','/file'].includes(file))
-            return 
-          
+          if (['file', '/file'].includes(file))
+            return
+
           // 同样删除文件夹,不然会解压失败
           deleteDir(curPath, true);
         } else {
@@ -38,12 +38,12 @@ function deleteDir(url, isDri = false,) {
   })
 }
 // 判断盘符 绝对路径相对路径
-function isAbsolutePath (strPath){
-  return /^[a-zA-Z]:\\/.test(strPath)
+function isAbsolutePath(strPath) {
+  return strPath.startsWith('/') || /^[a-zA-Z]:\\/.test(strPath);
 }
 
 // 判断 linux shell 绝对路径相对路径
-function isAbsoluteShellPath (strPath){
+function isAbsoluteShellPath(strPath) {
   return /^\/\w+/.test(strPath)
 }
 
