@@ -32,7 +32,7 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const join = require('path').join
 // 端口
-const port = 2003
+const port = 2004
 const {Host} = require('./utils/ip')
 // 初始化实例
 const app = new Koa()
