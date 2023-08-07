@@ -3,6 +3,8 @@ const Interceptor = require('./interceptor')
 // 初始化
 const home = new Router()
 home.get('/', async (ctx, next) => {
+  console.log('121');
+
 })
 
 const page = new Router()
@@ -21,11 +23,16 @@ routePathList.forEach(({ fileName, wholePath }) => {
   Routers.use(`/${fileName}`, obj.routes(), obj.allowedMethods())
 })
 
-console.log(Routers);
+// console.log(Routers);
+/**
+ * 调用实例:  文件名称 + 路由地址
+ * http://198.18.0.1:2004/ai/ai
+ * http://198.18.0.1:2004/update/file
+ */
 module.exports = (app) => {
   // 挂载路由到koa实例
   app
-  .use(Interceptor)
-  .use(Routers.routes())
-  .use(Routers.allowedMethods())
+    .use(Interceptor)
+    .use(Routers.routes())
+    .use(Routers.allowedMethods())
 }

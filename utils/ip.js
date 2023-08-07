@@ -1,20 +1,34 @@
-const os = require('os')
+const os = require('os');
 let Host = null;
-const network = os.networkInterfaces()
+const network = os.networkInterfaces();
+
 try {
+  // 遍历网络接口信息，找到第一个非localhost的IPv4地址
   for (const key in network) {
     if (!Host) {
-      Host = network[key][1].address
+      for (const details of network[key]) {
+        if (details.family === 'IPv4' && !details.internal) {
+          Host = details.address;
+          break;
+        }
+      }
     }
   }
 } catch (err) {
-  // console.log(err);
-  throw Error(err)
+  console.error(err);
+  throw new Error("Failed to get host IP address.");
 }
+
+// 如果没有找到非localhost的IPv4地址，默认使用localhost
+if (!Host) {
+  Host = 'localhost';
+}
+
 module.exports = {
   Host,
-  network
-}
+  network,
+};
+
 //WLAN 有两个对象,一个是ip6,一个是ip4,不过我们一般都是使用ip4
 /**
  * WLAN: [

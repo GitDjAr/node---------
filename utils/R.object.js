@@ -22,10 +22,11 @@ class RObj {
   }
 }
 const R = new RObj()
-module.exports = ({ ctx, code = 0, message = null }) => {
+module.exports = ({ ctx, code = 0, message = null, ...data }) => {
 
 
   return {
+    data,
     msg: ctx?.message || message || R.msg(code),
     code: ctx?.code || R.state(code)
   }
